@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlowerTrip", "FlowerTrip\FlowerTrip.vcxproj", "{A6137AA9-CABF-4203-9F91-816D4EC28F7B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kiss_fft", "kiss_fft\kiss_fft.vcxproj", "{FF575C3E-4DC6-4C47-A612-675DA6545D1B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MusicAnalysis", "MusicAnalysis\MusicAnalysis.vcxproj", "{5E291C2C-61C3-4766-9553-C3CA97305F82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +19,14 @@ Global
 		{A6137AA9-CABF-4203-9F91-816D4EC28F7B}.Debug|Win32.Build.0 = Debug|Win32
 		{A6137AA9-CABF-4203-9F91-816D4EC28F7B}.Release|Win32.ActiveCfg = Release|Win32
 		{A6137AA9-CABF-4203-9F91-816D4EC28F7B}.Release|Win32.Build.0 = Release|Win32
+		{FF575C3E-4DC6-4C47-A612-675DA6545D1B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FF575C3E-4DC6-4C47-A612-675DA6545D1B}.Debug|Win32.Build.0 = Debug|Win32
+		{FF575C3E-4DC6-4C47-A612-675DA6545D1B}.Release|Win32.ActiveCfg = Release|Win32
+		{FF575C3E-4DC6-4C47-A612-675DA6545D1B}.Release|Win32.Build.0 = Release|Win32
+		{5E291C2C-61C3-4766-9553-C3CA97305F82}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5E291C2C-61C3-4766-9553-C3CA97305F82}.Debug|Win32.Build.0 = Debug|Win32
+		{5E291C2C-61C3-4766-9553-C3CA97305F82}.Release|Win32.ActiveCfg = Release|Win32
+		{5E291C2C-61C3-4766-9553-C3CA97305F82}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
