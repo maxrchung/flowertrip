@@ -10,6 +10,19 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="FlowerTrip.cpp" />
+    <ClCompile Include="Prism.cpp" />
+    <ClCompile Include="Spectrum.cpp" />
+    <ClCompile Include="Vector3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Config.hpp" />
+    <ClInclude Include="Prism.hpp" />
+    <ClInclude Include="Spectrum.hpp" />
+    <ClInclude Include="Vector3.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A6137AA9-CABF-4203-9F91-816D4EC28F7B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

@@ -92,6 +92,9 @@
     <ClInclude Include="kiss_fftr.h" />
     <ClInclude Include="_kiss_fft_guts.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\age-quod-agis\kiss_fft130\README" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

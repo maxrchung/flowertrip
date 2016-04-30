@@ -79,7 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MusicAnalysis.cpp" />
     <ClCompile Include="Wav.cpp" />
   </ItemGroup>
   <ItemGroup>

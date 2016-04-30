@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="kiss_fftnd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,5 +56,15 @@
     <ClInclude Include="kiss_fft.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\age-quod-agis\kiss_fft130\README">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

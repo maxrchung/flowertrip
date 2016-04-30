@@ -11,7 +11,7 @@
 // also the size of the FFT arrays
 #define WINSIZE 8192
 
-#include "kiss_fft.h"
+#include "kiss_fftr.h"
 #include "Wav.hpp"
 #include <fstream>
 #include <iostream>
@@ -21,10 +21,10 @@ typedef std::vector<std::vector<float>> ScaleData;
 
 void LoadWavFile(const char* fname, Wav& song);
 void CalculateFreqPower(int freqBandStart, int freqBandEnd, int divisions, float& freqPower);
-void CalculateFrequencyBands(int freqBandStart, int freqBandEnd, int divisions, std::vector<int>& freqBandIndices, const Wav& song);
+void CalculateFrequencyBands(int freqBandStart, int freqBandEnd, int divisions, const Wav& song, std::vector<int>& freqBandIndices);
 void Hann(short in, int index, int size, float& value);
 void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, const Wav& song, ScaleData& scaleData);
-void SaveSnapshots(const ScaleData& scaleData, const std::string& destinationPath);
+void SaveSnapshots(int snapshotRate, const ScaleData& scaleData, const std::string& destinationPath);
 
 void main() {
 	std::string songPath = R"(X:\Music\Expander\Aura\auraLeftChannel.wav)";
@@ -37,10 +37,10 @@ void main() {
 	int freqBandStart = 50;
 	int freqBandEnd = 18000;
 	// Divisions is the number of frequency separations we want for the spectrum
-	int divisions = 10;
+	int divisions = 9;
 	// Actual indices corresponding to the WINSIZE
 	std::vector<int> freqBandIndices;
-	CalculateFrequencyBands(freqBandStart, freqBandEnd, divisions, freqBandIndices, song);
+	CalculateFrequencyBands(freqBandStart, freqBandEnd, divisions, song, freqBandIndices);
 
 	// How fast do you want to take snapshots, in milliseconds
 	int snapshotRate = 100;
@@ -49,10 +49,9 @@ void main() {
 	TakeSnapshots(snapshotRate, freqBandIndices, song, scaleData);
 
 	std::string destinationPath("ScaleData.txt");
-	SaveSnapshots(scaleData, destinationPath);
+	SaveSnapshots(snapshotRate, scaleData, destinationPath);
 
 	std::cout << "Music analysis complete" << std::endl;
-	std::cin.get();
 }
 
 // Grabs info from a WAV file and puts it into a class
@@ -110,7 +109,7 @@ void CalculateFreqPower(int freqBandStart, int freqBandEnd, int divisions, float
 	freqPower = powf(expf(1), freqPower);
 }
 
-void CalculateFrequencyBands(int freqBandStart, int freqBandEnd, int divisions, std::vector<int>& freqBandIndices, const Wav& song) {
+void CalculateFrequencyBands(int freqBandStart, int freqBandEnd, int divisions, const Wav& song, std::vector<int>& freqBandIndices) {
 	float freqPower;
 	CalculateFreqPower(freqBandStart, freqBandEnd, divisions, freqPower);
 
@@ -170,17 +169,10 @@ void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, co
 		}
 
 		// Setup FFT and apply FFT to input
-		// I'm using the complex version of kiss fft, there's a faster/optimized
-		// real value only version of it, but this works for now so I'm not eager
-		// to switch over
-		kiss_fft_cpx in[WINSIZE], out[WINSIZE];
-		for (int j = 0; j < WINSIZE; ++j) {
-			in[j].r = input[j];
-			// Make sure to set imaginary to 0.0f
-			in[j].i = 0.0f;
-		}
-		kiss_fft_cfg cfg = kiss_fft_alloc(WINSIZE, 0, NULL, NULL);
-		kiss_fft(cfg, in, out);
+		// Since we are using real values only, I use the real version of kiss_fft
+		kiss_fft_cpx out[WINSIZE / 2 + 1];
+		kiss_fftr_cfg cfg = kiss_fftr_alloc(WINSIZE, 0, NULL, NULL);
+		kiss_fftr(cfg, input, out);
 		free(cfg);
 
 		// Condense FFT output into frequency band information
@@ -189,7 +181,7 @@ void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, co
 			int startBin = freqBandIndices[j];
 			int endBin;
 			if (j == freqBandIndices.size() - 1) {
-				endBin = WINSIZE / 2;
+				endBin = WINSIZE / 2 + 1;
 			}
 			else {
 				endBin = freqBandIndices[j + 1];
@@ -210,8 +202,8 @@ void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, co
 			// Scale the magnitude to a more reasonable log/dB scale
 			float loggedMax = 10.0f * log10f(maxMagSquared);
 			// log10 can return from negative infinity to 0, so this clamps negative values
-			if (loggedMax < 0) {
-				loggedMax = 0;
+			if (loggedMax < 0.0f) {
+				loggedMax = 0.0f;
 			}
 
 			scaleData[j].push_back(loggedMax);
@@ -219,15 +211,21 @@ void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, co
 	}
 }
 
-void SaveSnapshots(const ScaleData& scaleData, const std::string& destinationPath) {
+void SaveSnapshots(int snapshotRate, const ScaleData& scaleData, const std::string& destinationPath) {
 	std::ofstream output(destinationPath);
+	output << snapshotRate << std::endl;
+	
+	int bandCount = scaleData.size();
+	output << bandCount << std::endl;
+
 	int sampleCount = scaleData[0].size();
 	output << sampleCount << std::endl;
+
 	for (int i = 0; i < scaleData.size(); ++i) {
-		output << "Band " << i << std::endl;
 		for (int j = 0; j < scaleData[i].size(); ++j) {
 			output << scaleData[i][j] << std::endl;
 		}
 	}
+
 	output.close();
 }
