@@ -21,9 +21,10 @@ public:
 	unsigned long size;
 	short* data;
 
-	// Prints out all the Wav info minus the data
-	std::string header();
+	friend std::ostream& operator<<(std::ostream& ostream, const Wav& wav);
 };
+
+
 
 
 #endif//WAV_HPP

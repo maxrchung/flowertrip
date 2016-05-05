@@ -1,22 +1,21 @@
 #include "Wav.hpp"
 #include <sstream>
 
-std::string Wav::header() {
-	std::stringstream ss;
-	ss << "chunkId: " << chunkId << std::endl;
-	ss << "chunkSize: " << chunkSize << std::endl;
-	ss << "format: " << format << std::endl;
-	ss << "subchunk1Id: " << subchunk1Id << std::endl;
-	ss << "subchunk1Size: " << subchunk1Size << std::endl;
-	ss << "audioFormat: " << audioFormat << std::endl;
-	ss << "numChannels: " << numChannels << std::endl;
-	ss << "sampleRate: " << sampleRate << std::endl;
-	ss << "byteRate: " << byteRate << std::endl;
-	ss << "blockAlign: " << blockAlign << std::endl;
-	ss << "bitsPerSample: " << bitsPerSample << std::endl;
-	ss << "subchunk2Id: " << subchunk2Id << std::endl;
-	ss << "subchunk2Size: " << subchunk2Size << std::endl;
-	ss << "size: " << size << std::endl;
+std::ostream& operator<<(std::ostream& os, const Wav& wav) {
+	os << "chunkId: " << wav.chunkId << std::endl;
+	os << "chunkSize: " << wav.chunkSize << std::endl;
+	os << "format: " << wav.format << std::endl;
+	os << "subchunk1Id: " << wav.subchunk1Id << std::endl;
+	os << "subchunk1Size: " << wav.subchunk1Size << std::endl;
+	os << "audioFormat: " << wav.audioFormat << std::endl;
+	os << "numChannels: " << wav.numChannels << std::endl;
+	os << "sampleRate: " << wav.sampleRate << std::endl;
+	os << "byteRate: " << wav.byteRate << std::endl;
+	os << "blockAlign: " << wav.blockAlign << std::endl;
+	os << "bitsPerSample: " << wav.bitsPerSample << std::endl;
+	os << "subchunk2Id: " << wav.subchunk2Id << std::endl;
+	os << "subchunk2Size: " << wav.subchunk2Size << std::endl;
+	os << "size: " << wav.size << std::endl;
 
-	return ss.str();
+	return os;
 }

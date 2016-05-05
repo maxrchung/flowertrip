@@ -13,12 +13,14 @@
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="FlowerTrip.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Prism.cpp" />
     <ClCompile Include="Spectrum.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.hpp" />
+    <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="Prism.hpp" />
     <ClInclude Include="Spectrum.hpp" />
     <ClInclude Include="Vector3.hpp" />

@@ -10,7 +10,7 @@ extern std::string storyboardPath;
 extern std::string linePath;
 extern std::string pointPath;
 
-extern float prismBuffer = 50.0f;
+extern float prismBuffer;
 extern float prismRadius;
 extern float lineScaleHeight;
 extern float pointScale;
