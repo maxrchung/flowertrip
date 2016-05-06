@@ -1,11 +1,12 @@
 #include "Vector3.hpp"
+#include "Matrix.hpp"
 
 Vector3::Vector3(float x, float y, float z)
 	: x(x), y(y), z(z) {	
 }
 
-Vector3::Vector3(Matrix m) 
-	: x(m.table[0][0]), y(m.table[0][1]), z(m.table[0][2]) {
+Vector3::Vector3(Matrix m)
+	: x(m.table[0][0]), y(m.table[1][0]), z(m.table[2][0]) {
 	if (m.columns != 1 || m.rows != 3) {
 		throw "Cannot turn Matrix into a Vector3; Matrix is not a Vector3";
 	}
@@ -41,19 +42,8 @@ Vector3 Vector3::RotateZ(float zRad) {
 	return Rotate(0, 0, zRad);
 }
 
-float Vector3::Magnitude() {
-	return sqrt(x * x + y * y + z * z);
-}
-
-void Vector3::Normalize() {
-	float len = this->Magnitude();
-	x = x / len;
-	y = y / len;
-	z = z / len;
-}
-
 Vector3 Vector3::RotateAround(Vector3 v, float rotAmount) {
-	v.Normalize();
+	v = v.Normalize();
 
 	float r = rotAmount;
 
@@ -66,4 +56,23 @@ Vector3 Vector3::RotateAround(Vector3 v, float rotAmount) {
 	};
 
 	return Vector3(rot * (*this));
+}
+
+float Vector3::Magnitude() {
+	return sqrt(x * x + y * y + z * z);
+}
+
+Vector3 Vector3::Normalize() {
+	float len = this->Magnitude();
+	return Vector3(x / len, y / len, z / len);
+}
+
+Vector3 Vector3::Cross(Vector3 v) {
+	return Vector3(y*v.z - z*v.y, 
+		           z*v.x - x*v.z, 
+				   x*v.y - y*v.x);
+}
+
+float Vector3::Dot(Vector3 v) {
+	return x*v.x + y*v.y + z*v.z;
 }

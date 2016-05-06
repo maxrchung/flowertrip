@@ -7,8 +7,8 @@ Matrix::Matrix(int rows, int columns)
 Matrix::Matrix(Vector3 v)
 	: rows(3), columns(1), table(Table(3, std::vector<float>(1, 0))) {
 	table[0][0] = v.x;
-	table[0][1] = v.y;
-	table[0][2] = v.z;
+	table[1][0] = v.y;
+	table[2][0] = v.z;
 }
 
 Matrix Matrix::operator*(const Matrix& rhs) {

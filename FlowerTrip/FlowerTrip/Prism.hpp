@@ -9,10 +9,9 @@
 
 class Prism {
 public:
-	Prism(std::vector<float> scaleData, Vector3 initPosition = Vector3(), Vector3 initDirection = Vector3());
+	Prism(std::vector<float> scaleData, Vector3 initPosition);
 	void ToSprite();
 	Vector3 position;
-	Vector3 direction;
 private:
 	std::vector<float> scaleData;
 };

@@ -16,7 +16,7 @@ void Spectrum::InitPrisms(const std::string& dataPath) {
 	int sampleCount;
 	data >> sampleCount;
 	
-	float bandDivision = PI / (bandCount - 1);
+	float bandDivision = 2 * PI / (bandCount - 1);
 
 	for (int i = 0; i < bandCount; ++i) {
 		std::vector<float> scaleData;
@@ -26,16 +26,18 @@ void Spectrum::InitPrisms(const std::string& dataPath) {
 
 			scaleData.push_back(scale);
 		}
-
+		
 		// Start on left
 		Vector3 startPos(-prismBuffer);
 		// Rotate to y-z position
-
-
+		startPos.RotateY(PI / 4);
 		// Rotation around origin
 		float prismRot = i * bandDivision;
 
-		prisms.push_back(new Prism(scaleData));
+		Vector3 cross = startPos.Cross(Vector3(0, -1, 0));
+		startPos = startPos.RotateAround(cross, prismRot);
+
+		prisms.push_back(new Prism(scaleData, startPos));
 	}
 	
 	data.close();

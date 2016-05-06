@@ -17,4 +17,5 @@ public:
 	Table table;
 };
 
+
 #endif//MATRIX_HPP
