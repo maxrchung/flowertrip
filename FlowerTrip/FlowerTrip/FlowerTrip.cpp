@@ -6,6 +6,7 @@
 
 void main() {
 	Spectrum spectrum(scaleDataPath);
+	spectrum.ToSprite();
 
 	Storyboard::Instance()->Write(storyboardPath);
 }

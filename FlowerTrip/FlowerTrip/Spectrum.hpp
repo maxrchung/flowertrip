@@ -8,6 +8,7 @@
 class Spectrum {
 public:
 	Spectrum(const std::string& dataPath);
+	void ToSprite();
 private:
 	void InitPrisms(const std::string& dataPath);
 	std::vector<Prism*> prisms;

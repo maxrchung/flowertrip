@@ -1,7 +1,6 @@
 #ifndef PRISM_HPP
 #define PRISM_HPP
 
-#include "Config.hpp"
 #include "Vector2.hpp"
 #include "Vector3.hpp"
 #include <string>

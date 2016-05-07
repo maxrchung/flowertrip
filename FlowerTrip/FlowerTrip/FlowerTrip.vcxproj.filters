@@ -24,13 +24,7 @@
     <ClCompile Include="Prism.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Config.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,13 +35,7 @@
     <ClInclude Include="Prism.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Config.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

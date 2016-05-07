@@ -2,7 +2,9 @@
 #define CONFIG_HPP
 
 #include <string>
+#include "Vector2.hpp"
 
+extern Vector2 midpoint;
 extern const float PI;
 
 extern std::string scaleDataPath;
@@ -12,8 +14,8 @@ extern std::string pointPath;
 
 extern float prismBuffer;
 extern float prismRadius;
+extern float prismScale;
 extern float lineScaleHeight;
 extern float pointScale;
-
 
 #endif//CONFIG_HPP
