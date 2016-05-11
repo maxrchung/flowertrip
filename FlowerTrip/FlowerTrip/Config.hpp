@@ -16,6 +16,9 @@ extern float prismBuffer;
 extern float prismRadius;
 extern float prismScale;
 extern float lineScaleHeight;
+extern float lineWidth;
 extern float pointScale;
+
+extern float songEnd;
 
 #endif//CONFIG_HPP

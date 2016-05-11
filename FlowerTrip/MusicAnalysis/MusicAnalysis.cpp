@@ -37,7 +37,7 @@ void main() {
 	int freqBandStart = 50;
 	int freqBandEnd = 18000;
 	// Divisions is the number of frequency separations we want for the spectrum
-	int divisions = 9;
+	int divisions = 16;
 	// Actual indices corresponding to the WINSIZE
 	std::vector<int> freqBandIndices;
 	CalculateFrequencyBands(freqBandStart, freqBandEnd, divisions, song, freqBandIndices);

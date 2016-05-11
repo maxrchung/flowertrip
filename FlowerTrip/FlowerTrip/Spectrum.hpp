@@ -7,12 +7,18 @@
 
 class Spectrum {
 public:
-	Spectrum(const std::string& dataPath);
+	static Spectrum* Instance();
+	static void InitPrisms(const std::string& dataPath);
 	void ToSprite();
-private:
-	void InitPrisms(const std::string& dataPath);
-	std::vector<Prism*> prisms;
+
 	int snapshotRate;
+private:
+	Spectrum() {};
+	Spectrum(const Spectrum&) {};
+	Spectrum& operator=(const Spectrum&) {};
+
+	static Spectrum* instance;
+	std::vector<Prism*> prisms;
 };
 
 #endif//SPECTRUM_HPP
