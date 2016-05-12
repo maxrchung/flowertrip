@@ -8,7 +8,7 @@
 
 class Prism {
 public:
-	Prism(std::vector<float> scaleData, Vector3 initPosition);
+	Prism(const std::vector<float>& scaleData, Vector3 initPosition);
 	void ToSprite();
 	Vector3 position;
 private:

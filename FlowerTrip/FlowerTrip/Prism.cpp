@@ -4,7 +4,7 @@
 #include "Spectrum.hpp"
 #include <algorithm>
 
-Prism::Prism(std::vector<float> scaleData, Vector3 initPosition)
+Prism::Prism(const std::vector<float>&	 scaleData, Vector3 initPosition)
 	: scaleData(scaleData), position(initPosition) {
 
 }

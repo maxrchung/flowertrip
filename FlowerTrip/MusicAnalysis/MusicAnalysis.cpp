@@ -37,7 +37,7 @@ void main() {
 	int freqBandStart = 50;
 	int freqBandEnd = 18000;
 	// Divisions is the number of frequency separations we want for the spectrum
-	int divisions = 16;
+	int divisions = 24;
 	// Actual indices corresponding to the WINSIZE
 	std::vector<int> freqBandIndices;
 	CalculateFrequencyBands(freqBandStart, freqBandEnd, divisions, song, freqBandIndices);
@@ -45,7 +45,7 @@ void main() {
 	// How fast do you want to take snapshots, in milliseconds
 	int snapshotRate = 100;
 	// Data structure we'll store all the changes in frequency
-	ScaleData scaleData(freqBandIndices.size());
+	ScaleData scaleData(divisions);
 	TakeSnapshots(snapshotRate, freqBandIndices, song, scaleData);
 
 	std::string destinationPath("ScaleData.txt");
@@ -120,6 +120,7 @@ void CalculateFrequencyBands(int freqBandStart, int freqBandEnd, int divisions, 
 	// determine the end range of bins you should search in.
 	// The nth FFT bin is in n * sampleRate / WINSIZE frequency
 	float freqConstant = (float)song.sampleRate / WINSIZE;
+	// freqBandIndices.size() is 17 because we start on freqBandStart
 	for (float freq = freqBandStart; freq <= freqBandEnd; freq *= freqPower) {
 		// freq = freqBandIndex * freqConstant
 		int freqBandIndex = freq / freqConstant;
@@ -141,7 +142,8 @@ void Hann(short in, int index, int size, float& value) {
 // Does the big bad job of running through samples,
 // computing FFT and scaling bars
 void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, const Wav& song, ScaleData& scaleData) {
-	float snapshotsPerSec = 1000.0f / snapshotRate;
+	// We do snapshotRate * 2 because we are using 1 channel WAV file
+	float snapshotsPerSec = 1000.0f / (snapshotRate * 2);
 	// A little on the distinction between snapshots and progress:
 	// Snapshot rate describes how often we're taking snapshots, and
 	// progress rate describes how many respective samples we need to
@@ -176,16 +178,10 @@ void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, co
 		free(cfg);
 
 		// Condense FFT output into frequency band information
-		for (int j = 0; j < freqBandIndices.size(); ++j) {
+		for (int j = 0; j < freqBandIndices.size() - 1; ++j) {
 			// Find bin indices
 			int startBin = freqBandIndices[j];
-			int endBin;
-			if (j == freqBandIndices.size() - 1) {
-				endBin = WINSIZE / 2 + 1;
-			}
-			else {
-				endBin = freqBandIndices[j + 1];
-			}
+			int endBin = freqBandIndices[j + 1];
 
 			// Track the max value out of the respective bins
 			// You don't have to use max, but a resource I referenced used it: https://github.com/zardoru/osutk/blob/master/tools/musnalisys.py
@@ -221,8 +217,8 @@ void SaveSnapshots(int snapshotRate, const ScaleData& scaleData, const std::stri
 	int sampleCount = scaleData[0].size();
 	output << sampleCount << std::endl;
 
-	for (int i = 0; i < scaleData.size(); ++i) {
-		for (int j = 0; j < scaleData[i].size(); ++j) {
+	for (int i = 0; i < bandCount; ++i) {
+		for (int j = 0; j < sampleCount; ++j) {
 			output << scaleData[i][j] << std::endl;
 		}
 	}
