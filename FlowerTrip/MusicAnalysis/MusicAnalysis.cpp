@@ -31,15 +31,13 @@ void main() {
 	Wav song;
 	LoadWavFile(songPath.c_str(), song);
 
-	// Power to measure frequencies by
-	float freqPower = powf(2.0f, 0.35f);
 	// Target frequencies we want to shoot for
 	int freqBandStart = 50;
-	int freqBandEnd = 18000;
+	int freqBandEnd = 9000;
 	// Divisions is the number of frequency separations we want for the spectrum
-	int divisions = 24;
+	int divisions = 23;
 	// Actual indices corresponding to the WINSIZE
-	std::vector<int> freqBandIndices;
+	std::vector<int> freqBandIndices(divisions + 1);
 	CalculateFrequencyBands(freqBandStart, freqBandEnd, divisions, song, freqBandIndices);
 
 	// How fast do you want to take snapshots, in milliseconds
@@ -120,11 +118,13 @@ void CalculateFrequencyBands(int freqBandStart, int freqBandEnd, int divisions, 
 	// determine the end range of bins you should search in.
 	// The nth FFT bin is in n * sampleRate / WINSIZE frequency
 	float freqConstant = (float)song.sampleRate / WINSIZE;
-	// freqBandIndices.size() is 17 because we start on freqBandStart
-	for (float freq = freqBandStart; freq <= freqBandEnd; freq *= freqPower) {
-		// freq = freqBandIndex * freqConstant
-		int freqBandIndex = freq / freqConstant;
-		freqBandIndices.push_back(freqBandIndex);
+	{
+		float freq = freqBandStart;
+		for (int i = 0; i < divisions + 1; ++i) {
+			int freqBandIndex = freq / freqConstant;
+			freqBandIndices[i] = freqBandIndex;
+			freq *= freqPower;
+		}
 	}
 }
 
@@ -188,7 +188,7 @@ void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, co
 			// Special thanks to Mr. Zardoru btw, helped point me in the right direction
 			// to fix some frequency issues
 			float maxMagSquared = 0.0f;
-			for (int k = startBin; k <= endBin; ++k) {
+			for (int k = startBin; k < endBin; ++k) {
 				float magSquared = out[k].r * out[k].r + out[k].i * out[k].i;
 				if (magSquared > maxMagSquared) {
 					maxMagSquared = magSquared;
