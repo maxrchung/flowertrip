@@ -50,6 +50,17 @@ void Spectrum::InitPrisms(const std::string& dataPath) {
 }
 
 void Spectrum::ToSprite() {
+	// Handle coloring
+	for (int p = 0; p < prisms.size(); ++p) {
+		float fadeFrac = (prisms.size() - p) / (float) prisms.size();
+		float fade = fadeFrac * 0.75f + 0.25f;
+		for (int j = 0; j < corners; ++j) {
+			prisms[p]->baseSprs[j]->Fade(0, songEnd, fade, fade);
+			prisms[p]->farSprs[j]->Fade(0, songEnd, fade, fade);
+			prisms[p]->lineSprs[j]->Fade(0, songEnd, fade, fade);
+		}
+	}
+
 	for (int i = 0; i < (int)prisms[0]->scaleData.size(); ++i) {
 		Vector3 turnVec = prisms[1]->position.Cross(prisms[0]->position);
 

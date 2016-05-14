@@ -1,8 +1,9 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <string>
+#include "Color.hpp"
 #include "Vector2.hpp"
+#include <string>
 
 extern Vector2 midpoint;
 extern const float PI;
@@ -19,6 +20,7 @@ extern float lineScaleHeight;
 extern float lineWidth;
 extern float prismRotY;
 extern float prismTurn;
+extern Color prismColor;
 
 extern float songEnd;
 

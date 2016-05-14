@@ -21,5 +21,6 @@ float lineScaleHeight = 0.1f;
 float lineWidth = 1000;
 float prismRotY = PI / 69;
 float prismTurn = prismRotY;
+Color prismColor(0, 116, 233);
 
 float songEnd = 200000;
