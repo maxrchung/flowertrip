@@ -75,30 +75,58 @@ void Spectrum::ToSprite() {
 			float endLineRot;
 			lineRotAdjust(baseCenter, startLineRot, endLineRot);
 
+			// Timing
+			int endTime = i * Spectrum::Instance()->snapshotRate;
+			int startTime;
+			if (i == 0) {
+				startTime = 0;
+			}
+			else {
+				startTime = endTime - Spectrum::Instance()->snapshotRate;
+			}
+
+			// Screen positions
+			std::vector<Vector2> basePts(corners, midpoint);
+			std::vector<Vector2> farPts(corners, midpoint);
+
+			// Handle lines
 			for (int j = 0; j < corners; ++j) {
-				int endTime = i * Spectrum::Instance()->snapshotRate;
-				int startTime;
-				if (i == 0) {
-					startTime = 0;
-				}
-				else {
-					startTime = endTime - Spectrum::Instance()->snapshotRate;
-				}
-
-				Vector2 basePos = midpoint + Vector2(baseVecs[j].x, -baseVecs[j].y);
-				Vector2 prevBasePos = prisms[p]->baseSprs[j]->position;
-				prisms[p]->baseSprs[j]->Move(startTime, endTime, prevBasePos, basePos);
-
+				basePts[j] += Vector2(baseVecs[j].x, -baseVecs[j].y);
 				farVecs[j] = baseVecs[j] + lenVec;
-				Vector2 endPos = midpoint + Vector2(farVecs[j].x, -farVecs[j].y);
-				prisms[p]->farSprs[j]->Move(startTime, endTime, prisms[p]->farSprs[j]->position, endPos);
+				farPts[j] += Vector2(farVecs[j].x, -farVecs[j].y);
 
-				Vector2 lineDist = endPos - prisms[p]->baseSprs[j]->position;
+				Vector2 lineDist = farPts[j] - basePts[j];
 				float lineLen = lineDist.Magnitude();
 				float lineLenScale = lineLen / lineWidth;
-				prisms[p]->lineSprs[j]->Move(startTime, endTime, prevBasePos, basePos);
+				prisms[p]->lineSprs[j]->Move(startTime, endTime, prisms[p]->lineSprs[j]->position, basePts[j]);
 				prisms[p]->lineSprs[j]->ScaleVector(startTime, endTime, prisms[p]->lineSprs[j]->scaleVector, Vector2(lineLenScale, prisms[p]->lineSprs[j]->scaleVector.y));
 				prisms[p]->lineSprs[j]->Rotate(startTime, endTime, startLineRot, endLineRot);
+			}
+
+			// Handle faces after
+			for (int j = 0; j < corners; ++j) {
+				Vector3 leftVec = baseVecs[j];
+				Vector3 rightVec = baseVecs[(j + 1) % corners];
+				Vector2 edge = Vector2(leftVec) - Vector2(rightVec);
+
+				Vector2 basePt = midpoint + Vector2(rightVec.x, -rightVec.y);
+				Vector3 farVec = farVecs[(j + 1) % corners];
+				Vector2 farPt = midpoint + Vector2(farVec.x, -farVec.y);
+
+				float edgeLen = edge.Magnitude();
+				float edgeLenScale = edgeLen / lineWidth;
+				prisms[p]->baseSprs[j]->Move(startTime, endTime, prisms[p]->baseSprs[j]->position, basePt);
+				prisms[p]->baseSprs[j]->ScaleVector(startTime, endTime, prisms[p]->baseSprs[j]->scaleVector, Vector2(edgeLenScale, prisms[p]->baseSprs[j]->scaleVector.y));
+				prisms[p]->farSprs[j]->Move(startTime, endTime, prisms[p]->farSprs[j]->position, farPt);
+				prisms[p]->farSprs[j]->ScaleVector(startTime, endTime, prisms[p]->farSprs[j]->scaleVector, Vector2(edgeLenScale, prisms[p]->farSprs[j]->scaleVector.y));
+
+				if (edge.Magnitude() > 0) {
+					float startEdgeRot = prisms[p]->baseSprs[j]->rotation;
+					float endEdgeRot;
+					lineRotAdjust(edge, startEdgeRot, endEdgeRot);
+					prisms[p]->baseSprs[j]->Rotate(startTime, endTime, startEdgeRot, endEdgeRot);
+					prisms[p]->farSprs[j]->Rotate(startTime, endTime, startEdgeRot, endEdgeRot);
+				}
 			}
 		}
 

@@ -18,8 +18,7 @@ float prismRadius = 5;
 float prismScale = 2;
 float lineScaleHeight = 0.1f;
 // Width of image
-float lineWidth = 5000;
-float pointScale = 0;
+float lineWidth = 1000;
 float prismRotY = PI / 69;
 float prismTurn = prismRotY;
 
