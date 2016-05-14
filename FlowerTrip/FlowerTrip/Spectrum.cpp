@@ -70,22 +70,10 @@ void Spectrum::ToSprite() {
 
 			float len = prisms[p]->scaleData[i] * prismScale;
 			Vector3 lenVec = baseCenter.Normalize() * len;
-			float lineRot = Vector2(-1, 0).AngleBetween(Vector2(baseCenter));
-			if (baseCenter.y < 0) {
-				lineRot *= -1;
-			}
 
-			// Handles case when flipping from -180 to 180 or vice versa
-			float startRot = prisms[p]->lineSprs[0]->rotation;
-			float endRot = lineRot;
-			if (fabs(startRot - endRot) > PI) {
-				if (endRot < 0) {
-					startRot -= PI * 2;
-				}
-				else {
-					startRot += PI * 2;
-				}
-			}
+			float startLineRot = prisms[p]->lineSprs[0]->rotation;
+			float endLineRot;
+			lineRotAdjust(baseCenter, startLineRot, endLineRot);
 
 			for (int j = 0; j < corners; ++j) {
 				int endTime = i * Spectrum::Instance()->snapshotRate;
@@ -110,7 +98,7 @@ void Spectrum::ToSprite() {
 				float lineLenScale = lineLen / lineWidth;
 				prisms[p]->lineSprs[j]->Move(startTime, endTime, prevBasePos, basePos);
 				prisms[p]->lineSprs[j]->ScaleVector(startTime, endTime, prisms[p]->lineSprs[j]->scaleVector, Vector2(lineLenScale, prisms[p]->lineSprs[j]->scaleVector.y));
-				prisms[p]->lineSprs[j]->Rotate(startTime, endTime, startRot, endRot);
+				prisms[p]->lineSprs[j]->Rotate(startTime, endTime, startLineRot, endLineRot);
 			}
 		}
 
@@ -120,6 +108,23 @@ void Spectrum::ToSprite() {
 
 		for (int p = 0; p < prisms.size(); ++p) {
 			prisms[p]->position = prisms[p]->position.RotateY(prismRotY);
+		}
+	}
+}
+
+// Handles case when flipping from -180 to 180 or vice versa
+void Spectrum::lineRotAdjust(Vector3 baseCenter, float& startRot, float& endRot) {
+	endRot = Vector2(-1, 0).AngleBetween(Vector2(baseCenter));
+	if (baseCenter.y < 0) {
+		endRot *= -1;
+	}
+
+	if (fabs(startRot - endRot) > PI) {
+		if (endRot < 0) {
+			startRot -= PI * 2;
+		}
+		else {
+			startRot += PI * 2;
 		}
 	}
 }

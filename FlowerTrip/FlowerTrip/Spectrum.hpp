@@ -14,6 +14,7 @@ public:
 	int snapshotRate;
 	int corners = 4;
 private:
+	void lineRotAdjust(Vector3 baseCenter, float& startRot, float& endRot);
 	Spectrum() {};
 	Spectrum(const Spectrum&) {};
 	Spectrum& operator=(const Spectrum&) {};
