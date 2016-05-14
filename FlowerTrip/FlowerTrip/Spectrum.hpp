@@ -12,6 +12,7 @@ public:
 	void ToSprite();
 
 	int snapshotRate;
+	int corners = 4;
 private:
 	Spectrum() {};
 	Spectrum(const Spectrum&) {};

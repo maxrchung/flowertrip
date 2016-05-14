@@ -12,7 +12,7 @@ std::string pointPath("point.png");
 
 // Prism
 // Distance from center
-float prismBuffer = 100;
+float prismBuffer = 80;
 // Thickness of prism
 float prismRadius = 5;
 float prismScale = 2;
@@ -20,5 +20,7 @@ float lineScaleHeight = 0.1f;
 // Width of image
 float lineWidth = 5000;
 float pointScale = 0.04f;
+float prismRotY = PI / 69;
+float prismTurn = prismRotY;
 
 float songEnd = 200000;
