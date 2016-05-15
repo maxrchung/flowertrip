@@ -27,7 +27,7 @@ void TakeSnapshots(int snapshotRate, const std::vector<int>& freqBandIndices, co
 void SaveSnapshots(int snapshotRate, const ScaleData& scaleData, const std::string& destinationPath);
 
 void main() {
-	std::string songPath = R"(X:\Music\Expander\Aura\auraLeftChannel.wav)";
+	std::string songPath = R"(X:\Music\Adi\osuFinalSketchLeft.wav)";
 	Wav song;
 	LoadWavFile(songPath.c_str(), song);
 
@@ -35,13 +35,13 @@ void main() {
 	int freqBandStart = 50;
 	int freqBandEnd = 9000;
 	// Divisions is the number of frequency separations we want for the spectrum
-	int divisions = 23;
+	int divisions = 16;
 	// Actual indices corresponding to the WINSIZE
 	std::vector<int> freqBandIndices(divisions + 1);
 	CalculateFrequencyBands(freqBandStart, freqBandEnd, divisions, song, freqBandIndices);
 
 	// How fast do you want to take snapshots, in milliseconds
-	int snapshotRate = 100;
+	int snapshotRate = 150;
 	// Data structure we'll store all the changes in frequency
 	ScaleData scaleData(divisions);
 	TakeSnapshots(snapshotRate, freqBandIndices, song, scaleData);

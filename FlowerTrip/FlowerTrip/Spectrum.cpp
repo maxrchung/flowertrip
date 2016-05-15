@@ -2,6 +2,7 @@
 #include "Spectrum.hpp"
 #include "Sprite.hpp"
 #include <fstream>
+#include <iostream>
 
 Spectrum* Spectrum::instance = NULL;
 
@@ -50,18 +51,45 @@ void Spectrum::InitPrisms(const std::string& dataPath) {
 }
 
 void Spectrum::ToSprite() {
-	// Handle coloring
+	// Colors
+	{
+		float timeDiff = songEndOffset - songStartOffset;
+		float timeFrac = timeDiff / (prismColors.size() - 1);
+
+		for (int i = 0; i < prismColors.size() - 1; ++i) {
+			float startTime = songStartOffset + i * timeFrac;
+			float endTime = songStartOffset + (i + 1) * timeFrac;
+			Color startColor = prismColors[i];
+			Color endColor = prismColors[i + 1];
+
+			for (int p = 0; p < prisms.size(); ++p) {
+				for (int j = 0; j < corners; ++j) {
+					prisms[p]->baseSprs[j]->Color(startTime, endTime, startColor, endColor);
+					prisms[p]->farSprs[j]->Color(startTime, endTime, startColor, endColor);
+					prisms[p]->lineSprs[j]->Color(startTime, endTime, startColor, endColor);
+				}
+			}
+		}
+	}
+
+	// Fading
 	for (int p = 0; p < prisms.size(); ++p) {
 		float fadeFrac = (prisms.size() - p) / (float) prisms.size();
 		float fade = fadeFrac * 0.75f + 0.25f;
 		for (int j = 0; j < corners; ++j) {
-			prisms[p]->baseSprs[j]->Fade(0, songEnd, fade, fade);
-			prisms[p]->farSprs[j]->Fade(0, songEnd, fade, fade);
-			prisms[p]->lineSprs[j]->Fade(0, songEnd, fade, fade);
+			prisms[p]->baseSprs[j]->Fade(songStartOffset, songStart, 0, fade);
+			prisms[p]->baseSprs[j]->Fade(songEnd, songEndOffset, fade, 0);
+
+			prisms[p]->farSprs[j]->Fade(songStartOffset, songStart, 0, fade);
+			prisms[p]->farSprs[j]->Fade(songEnd, songEndOffset, fade, 0);
+
+			prisms[p]->lineSprs[j]->Fade(songStartOffset, songStart, 0, fade);
+			prisms[p]->lineSprs[j]->Fade(songEnd, songEndOffset, fade, 0);
 		}
 	}
 
 	for (int i = 0; i < (int)prisms[0]->scaleData.size(); ++i) {
+		std::cout << "Processing: " << i << "/" << prisms[0]->scaleData.size() << " sample" << std::endl;
 		Vector3 turnVec = prisms[1]->position.Cross(prisms[0]->position);
 
 		for (int p = 0; p < prisms.size(); ++p) {
@@ -111,7 +139,9 @@ void Spectrum::ToSprite() {
 				float lineLenScale = lineLen / lineWidth;
 				prisms[p]->lineSprs[j]->Move(startTime, endTime, prisms[p]->lineSprs[j]->position, basePts[j]);
 				prisms[p]->lineSprs[j]->ScaleVector(startTime, endTime, prisms[p]->lineSprs[j]->scaleVector, Vector2(lineLenScale, prisms[p]->lineSprs[j]->scaleVector.y));
-				prisms[p]->lineSprs[j]->Rotate(startTime, endTime, startLineRot, endLineRot);
+				if (startLineRot != endLineRot) {
+					prisms[p]->lineSprs[j]->Rotate(startTime, endTime, startLineRot, endLineRot);
+				}
 			}
 
 			// Handle faces after
@@ -135,8 +165,10 @@ void Spectrum::ToSprite() {
 					float startEdgeRot = prisms[p]->baseSprs[j]->rotation;
 					float endEdgeRot;
 					lineRotAdjust(edge, startEdgeRot, endEdgeRot);
-					prisms[p]->baseSprs[j]->Rotate(startTime, endTime, startEdgeRot, endEdgeRot);
-					prisms[p]->farSprs[j]->Rotate(startTime, endTime, startEdgeRot, endEdgeRot);
+					if (startEdgeRot != endEdgeRot) {
+						prisms[p]->baseSprs[j]->Rotate(startTime, endTime, startEdgeRot, endEdgeRot);
+						prisms[p]->farSprs[j]->Rotate(startTime, endTime, startEdgeRot, endEdgeRot);
+					}
 				}
 			}
 		}
